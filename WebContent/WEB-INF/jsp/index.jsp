@@ -18,7 +18,7 @@
 	<meta http-equiv="expires" content="0">
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="Index Page">
-	<link rel="stylesheet" type="text/css"   href="uikit-2.3.1/css/uikit.gradient.min.css">  
+	<link rel="stylesheet" type="text/css" href="uikit-2.3.1/css/uikit.gradient.min.css">  
     <link rel="stylesheet" type="text/css" href="uikit-2.3.1/addons/css/notify.gradient.min.css">  
 </head>
 <body>
@@ -61,7 +61,7 @@
 	</fieldset>
 </div>
 
-<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.2.js"></script>
 <script type="text/javascript" src="uikit-2.3.1/js/uikit.min.js"></script>  
 <script type="text/javascript" src="uikit-2.3.1/addons/js/notify.min.js"></script> 
 <script type="text/javascript">

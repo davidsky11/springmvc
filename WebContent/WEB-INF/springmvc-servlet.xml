@@ -53,6 +53,9 @@
 	<!-- 对静态资源文件的访问，不支持访问WEB-INF目录 -->
 	<mvc:default-servlet-handler />
 	
+	<!-- 将静态文件指定到某个特殊的文件夹中统一处理 -->
+	<mvc:resources location="/resources/" mapping="/resources/**"/>
+	
 	<!-- 国际化消息配置 -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource" >
 		<property name="defaultEncoding" value="UTF-8" ></property>
@@ -72,7 +75,6 @@
 	<!-- 使用较少 -->
 	<bean name="/welcome.html" class="com.kv.controller.WelcomeController" ></bean>
 	
-	
 	<bean id="stringConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
@@ -89,6 +91,16 @@
 				<ref bean="stringConverter" />
 				<ref bean="jsonConverter" />
 			</list>
+		</property>
+	</bean>
+	
+	<!-- 全局异常处理 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" >
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.kv.service.UserException">error</prop>
+				<prop key="java.lang.NullPointerException">exception</prop>
+			</props>
 		</property>
 	</bean>
 	
