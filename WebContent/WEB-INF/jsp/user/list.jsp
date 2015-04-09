@@ -14,31 +14,50 @@
 </head>
 <body>
 	<div class="container">
+	<h1>用户列表页面</h1>
 	<h1>
-		<a href="add">添加</a> 
+		<a href="add">用户添加</a> 
 	</h1>
+	<hr/>
 	--${LoginUser.nickname }
 	<br/>
 	<table class="table table-striped">
 		<thead>
 			<tr>
+				<th>用户标识</th>
 				<th>用户名</th>
-				<th>中文名</th>
+				<th>用户昵称</th>
 				<th>密码</th>
 				<th>邮箱</th>
 				<th>修改</th>
 				<th>删除</th>
 			</tr>
 		</thead>
-		<c:forEach items="${users }" var="um">
-			<tr><th>${um.value.username }</th>
-				<th><a href="${um.value.username }">${um.value.nickname }</a></th>
-				<th>${um.value.password }</th>
-				<th>${um.value.email }</th>
-				<th><a href="${um.value.username }/update">修改</a></th>
-				<th><a href="${um.value.username }/delete">删除</a></th>
-			</tr>
-		</c:forEach>
+		<c:if test="${pages.total lt 0 }">
+			<tr>
+			<td colspan="6">目前还没有用户数据</td>
+		</c:if>
+		<c:if test="${pages.total gt 0 }">
+			<c:forEach items="${pagers.datas }" var="um">
+				<tr>
+					<th>${um.id }</th>
+					<th>${um.username }</th>
+					<th><a href="${um.username }">${um.nickname }</a></th>
+					<th>${um.password }</th>
+					<th>${um..email }</th>
+					<th><a href="${um.username }/update">更新</a></th>
+					<th><a href="${um.username }/delete">删除</a></th>
+				</tr>
+			</c:forEach>
+		</c:if>
+		<tr>
+		<td colspan="6">
+			<jsp:include page="/inc/pager.jsp">
+				<jsp:param value="users" name="url" />
+				<jsp:param value="${pagers.total }" name="items" />
+			</jsp:include>
+			
+		</td>
 	</table>
 	
 	</div>

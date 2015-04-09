@@ -2,9 +2,6 @@ package com.kv.exception;
 
 public class UserException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 537393832973249160L;
 
 	public UserException() {

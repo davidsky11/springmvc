@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" 
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+			http://cxf.apache.org/jaxws 
+			http://cxf.apache.org/schemas/jaxws.xsd
+			http://cxf.apache.org/jaxrs 
+			http://cxf.apache.org/schemas/jaxrs.xsd" >
+			
+	<!-- 打开Spring的annotation支持 -->
+	<context:annotation-config />
+	<!-- 设定Spring去哪些包中找Annotations -->
+	<context:component-scan base-package="com.fsvm.web.action" />
+
+	<!-- 导入Src目录下的jdbc.properties文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置连接池的初始值 -->
+		<property name="initialSize" value="1" />
+		<property name="maxActive" value="100" />
+		<!-- 当最小空闲时，当连接少于minIdle时会自动去申请一些连接 -->
+		<property name="minIdel" value="1" />
+        <property name="maxIdle" value="30" />
+        <property name="maxWait" value="1000" />
+        <property name="validationQuery" value="select 1" />
+        <property name="testOnBorrow" value="true" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>com.kv.model</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.format_sql">false</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+ 	<!-- 事务管理器 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- ///////////////////////////////// AOP SETUP AREA //////////////////////////////////////// -->
+		
+	<!-- 权限控制器 -->
+	<bean id="aspectBeforeHandle" class="com.fsvm.util.AspectBeforeHandle" scope="prototype" />
+	
+	<!-- 权限管控 -->
+	<aop:config proxy-target-class="true">
+		<aop:aspect id="authorityHandle" ref="aspectBeforeHandle" >
+			<aop:before pointcut="execution(public * com.fsvm.web.action.*.addPage(..)) 
+			|| execution(public * com.fsvm.web.action.*.list*(..)) 
+			|| execution(public * com.fsvm.web.action.*.editPage(..)) 
+			|| execution(public * com.fsvm.web.action.*.delete*(..))" method="authority" />
+		</aop:aspect>
+	</aop:config>
+
+	<!-- 事务控制 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="exists" read-only="true" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="del*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="list*" read-only="true" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+			<tx:method name="find*" propagation="REQUIRED"/>
+			<tx:method name="*" propagation="SUPPORTS" read-only="true"></tx:method>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config proxy-target-class="false">
+		<aop:pointcut id="bussinessService"
+			expression="execution(public * com.fsvm.service.*.*(..))" />
+		<aop:advisor pointcut-ref="bussinessService" advice-ref="txAdvice" /> 
+	</aop:config>
+	
+	<!-- 自动代理 -->
+	<!-- 
+	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+	 -->
+	<bean id="exceptionHandler" class="com.fsvm.util.exception.ExceptionHandler"/>
+	<!-- 这里配置切入点，可以为正则表达式 .*DAOImpl\.delete.* -->
+	<bean id="exceptionHandlereAdvisor"
+		class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice">
+			<ref bean="exceptionHandler" />
+		</property>
+		<property name="patterns">
+			<list>
+				<!-- 切入包名中含impl字符的类主要为了捕获实现接口的类 -->
+				<value>.add.*</value>
+				<value>.create.*</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 导入restful配置文件 -->
+	<!-- <import resource="classpath:configs/rest-servlet.xml"/> -->
+	
+	<!-- Import apache CXF bean definition -->  
+    <!-- <import resource="classpath:META-INF/cxf/cxf.xml" />  
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" /> 
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	
+	<bean id="ps" class="com.fsvm.web.rest.PersonServiceImpl" />
+	<jaxrs:server id="personService" address="/rest">
+		<jaxrs:serviceBeans>
+			<ref bean="ps" />
+		</jaxrs:serviceBeans>
+		<jaxrs:inInterceptors>
+            <bean class="org.apache.cxf.interceptor.LoggingInInterceptor"></bean>
+         </jaxrs:inInterceptors>
+        <jaxrs:outInterceptors>
+            <bean class="org.apache.cxf.interceptor.LoggingOutInterceptor"></bean>
+        </jaxrs:outInterceptors>
+        <jaxrs:extensionMappings>
+        	<entry key="json" value="application/json" />
+        </jaxrs:extensionMappings>
+	</jaxrs:server> -->
+	
+</beans>
