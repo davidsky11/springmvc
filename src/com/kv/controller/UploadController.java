@@ -29,7 +29,7 @@ public class UploadController {
             Iterator<String> iter = multiRequest.getFileNames();  
             while(iter.hasNext()){  
                 MultipartFile file = multiRequest.getFile(iter.next());  
-                String fileName = "demoUpload" +file.getOriginalFilename();  
+                String fileName = file.getOriginalFilename();  
                 String path ="D:/upload/" +fileName;  
                 File localFile = new File(path);  
                 file.transferTo(localFile);  
