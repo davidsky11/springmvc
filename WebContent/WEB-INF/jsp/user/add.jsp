@@ -15,7 +15,7 @@
 	<div class="container">
 		<h1><a href="#">返回</a></h1>
 		<!-- 此时没有写action，直接提交给/add -->
-		<sf:form class="form-horizontal" method="post" modelAttribute="user"><br/>
+		<sf:form class="form-horizontal" method="post" modelAttribute="user" enctype="multipart/form-data"><br/>
 			<fieldset>
 			<legend>新增用户信息</legend>
 			<div class="control-group">
@@ -40,6 +40,12 @@
 				<label class="control-label" for="email">邮箱</label>
 				<div class="controls">
 					<sf:input id="email" path="email"/><sf:errors path="email" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="email">附件</label>
+				<div class="controls">
+					<input id="attach" type="file" name="attach"/>
 				</div>
 			</div>
 			</fieldset>
