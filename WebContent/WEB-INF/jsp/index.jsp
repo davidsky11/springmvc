@@ -5,8 +5,8 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort() 
 			+ path + "/";
-
 %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -27,7 +27,7 @@
 </div>
 <div style="width:800px;margin-left:auto;margin-right:auto;">
 	<fieldset class="uk-form">
-		<legend>Uikit表单渲染测试</legend>
+		<legend>bootstrap表单渲染测试</legend>
 		<div class="uk-form-row">
 			<input type="text" class="uk-width-1-1">
 		</div>

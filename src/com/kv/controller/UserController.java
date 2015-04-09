@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.kv.exception.UserException;
 import com.kv.model.User;
-import com.kv.service.UserException;
 
 @Controller
 @RequestMapping("/user")
@@ -26,7 +26,9 @@ public class UserController {
 	private Map<String, User> users = new HashMap<String, User>();
 	
 	public UserController() {
-		users.put("kv", new User("kv", "123", "戴胜凯", "sss"));
+		users.put("kv", new User("ls", "123", "李四", "sss"));
+		users.put("kv", new User("zs", "123", "张三", "sss"));
+		users.put("kv", new User("ww", "123", "王五", "sss"));
 		users.put("cl", new User("cl", "123", "陈亮", "ttt"));
 		users.put("wst", new User("wst", "123", "王思婷", "uuu"));
 		users.put("zcw", new User("zcw", "123", "詹成伟", "vvv"));

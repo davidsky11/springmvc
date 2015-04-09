@@ -98,10 +98,16 @@
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" >
 		<property name="exceptionMappings">
 			<props>
-				<prop key="com.kv.service.UserException">error</prop>
+				<prop key="com.kv.exception.UserException">error</prop>
 				<prop key="java.lang.NullPointerException">exception</prop>
 			</props>
 		</property>
+	</bean>
+	
+	<!-- 上传拦截 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonMultipartResolver">
+		<property name="maxUploadSize" value="800000" />
+		<property name="maxInMemorySize" value="4096" />
 	</bean>
 	
 </beans>

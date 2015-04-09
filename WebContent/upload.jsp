@@ -4,9 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>上传文件 测试</title>
 </head>
 <body>
-<h1>${exception.message }</h1>
+	<h1>上传文件</h1>
+	<form name="form" action="upload" method="post" enctype="multipart/form-data">
+		选择文件: <input type="file" name="file">
+		<input type="submit" value="上传">
+	</form>
 </body>
 </html>
