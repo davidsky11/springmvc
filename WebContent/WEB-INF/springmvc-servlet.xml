@@ -73,7 +73,7 @@
 	</bean>
 	
 	<!-- 使用较少 -->
-	<bean name="/welcome.html" class="com.kv.controller.WelcomeController" ></bean>
+	<!-- <bean name="/welcome.html" class="com.kv.controller.WelcomeController" ></bean> -->
 	
 	<bean id="stringConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
 		<property name="supportedMediaTypes">

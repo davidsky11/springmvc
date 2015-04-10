@@ -52,11 +52,17 @@
 		</c:if>
 		<tr>
 		<td colspan="6">
-			<jsp:include page="/inc/pager.jsp">
-				<jsp:param value="users" name="url" />
-				<jsp:param value="${pagers.total }" name="items" />
-			</jsp:include>
-			
+			<%-- <jsp:include page="/inc/pager.jsp">
+				<jsp:param name="url" value="users" />
+				<jsp:param name="items" value="${pagers.total }" />
+			</jsp:include> --%>
+			<c:import url="inc/pager.jsp">
+				<c:param name="total" value="${pagers.total }"></c:param>
+				<c:param name="pageSize" value="15"></c:param>
+				<c:param name="pageEnumShow" value="3"></c:param>
+				<c:param name="pageUrl" value="users"></c:param>
+				<c:param name="pageIndex" value="0"></c:param>
+			</c:import>
 		</td>
 	</table>
 	

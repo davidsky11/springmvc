@@ -5,46 +5,68 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
 
 import com.kv.dao.IUserDao;
 import com.kv.model.Pager;
 import com.kv.model.SystemContext;
 import com.kv.model.User;
 
-public class UserDaoImpl extends HibernateDaoSupport implements IUserDao {
+@Repository("userDao")
+public class UserDaoImpl implements IUserDao {
+	
+	private SessionFactory sessionFactory;
+	
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
 
 	@Resource
-	public void setSuperSessionFactory(SessionFactory sessionFactory) {
-		this.setSessionFactory(sessionFactory);
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
-	
+
 	@Override
 	public void add(User user) {
-		this.getHibernateTemplate().save(user);
+		Session session = sessionFactory.openSession();
+		session.save(user);
+		session.close();
 	}
 
 	@Override
 	public void update(User user) {
-		this.getHibernateTemplate().update(user);
+		Session session = sessionFactory.openSession();
+		session.update(user);
+		session.close();
 	}
 
 	@Override
 	public void delete(Integer id) {
-		User user = this.load(id);
-		this.getHibernateTemplate().delete(user);
+		Session session = sessionFactory.openSession();
+		User user = (User) session.load(User.class, id);
+		session.delete(user);
+		session.close();
 	}
 
 	@Override
 	public User load(int id) {
-		return this.getHibernateTemplate().load(User.class, id);
+		Session session = sessionFactory.openSession();
+		User user = (User) session.load(User.class, id);
+		session.close();
+		
+		return user;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> list() {
-		return this.getSession().createQuery("from User").list();
+		Session session = sessionFactory.openSession();
+		List<User> users = session.createQuery("from User").list();
+		session.close();
+		
+		return users;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -53,7 +75,9 @@ public class UserDaoImpl extends HibernateDaoSupport implements IUserDao {
 		int size = SystemContext.getSize();
 		int offset = SystemContext.getOffset();
 		
-		Query query = this.getSession().createQuery("from User");
+		Session session = sessionFactory.openSession();
+		
+		Query query = session.createQuery("from User");
 		query.setFirstResult(offset).setMaxResults(size);
 		
 		List<User> datas = query.list();
@@ -61,18 +85,25 @@ public class UserDaoImpl extends HibernateDaoSupport implements IUserDao {
 		us.setDatas(datas);
 		us.setOffset(offset);
 		us.setSize(size);
-		long total = (Long) this.getSession()
+		long total = (Long) session
 				.createQuery("select count(*) from User")
 				.uniqueResult();
 		us.setTotal(total);
+		
+		session.close();
 		
 		return us;
 	}
 
 	@Override
 	public User loadByUsername(String username) {
-		return (User) this.getSession().createQuery("from User where username=?")
-				.setParameter(0, username).uniqueResult();
+		Session session = sessionFactory.openSession();
+		User user = (User) session.createQuery("from User where username=?")
+				.setParameter(0, username)
+				.uniqueResult();
+		session.close();
+		
+		return user;
 	}
 
 	@Override
