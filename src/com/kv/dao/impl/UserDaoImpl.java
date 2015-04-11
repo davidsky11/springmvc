@@ -108,8 +108,14 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public User login(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = sessionFactory.openSession();
+		User user = (User) session.createQuery("from User where username=? and password=?")
+				.setParameter(0, username)
+				.setParameter(1, password)
+				.uniqueResult();
+		session.close();
+		
+		return user;
 	}
 
 }

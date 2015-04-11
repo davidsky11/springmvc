@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
+<%-- <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %> --%>
 <%@taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<decorator:head />
+	<!-- <decorator:head /> -->
+	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title><decorator:title default="欢迎使用用户资源系统"/></title>
+	<title>欢迎使用用户资源系统</title><!-- <decorator:title default="欢迎使用用户资源系统"/> -->
 	<meta name="viewport" content="width=device-width; initial-scale=1.0" />
 	<link rel="stylesheet" href="../resources/css/bootstrap-2.3.2/bootstrap.css" />
 	<link rel="stylesheet" href="../resources/css/bootstrap-2.3.2/bootstrap-responsive.css" />

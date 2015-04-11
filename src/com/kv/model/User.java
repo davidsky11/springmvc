@@ -30,7 +30,16 @@ public class User {
 		this.password = password;
 		this.email = email;
 	}
-
+	
+	public User(Integer id, String username, String nickname, String password,
+			String email) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nickname = nickname;
+		this.password = password;
+		this.email = email;
+	}
 
 	@GeneratedValue
 	@Id
