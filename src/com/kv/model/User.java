@@ -1,5 +1,6 @@
 package com.kv.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -52,6 +53,7 @@ public class User {
 	}
 
 	@NotEmpty(message = "用户名不能为空")
+	@Column(name = "username")
 	public String getUsername() {
 		return username;
 	}
@@ -60,6 +62,7 @@ public class User {
 		this.username = username;
 	}
 
+	@Column(name = "nickname")
 	public String getNickname() {
 		return nickname;
 	}
@@ -69,6 +72,7 @@ public class User {
 	}
 
 	@Size(min = 1, max = 10, message="密码的长度应该在1和10 之间")
+	@Column(name = "password")
 	public String getPassword() {
 		return password;
 	}
@@ -78,6 +82,7 @@ public class User {
 	}
 
 	@Email(message = "邮箱格式不正确")
+	@Column(name = "email")
 	public String getEmail() {
 		return email;
 	}

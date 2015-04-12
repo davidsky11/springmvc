@@ -14,8 +14,9 @@
 	<div class="container">
 		<h1><a href="#">返回</a></h1>
 		<ul>
+			<li>ID: ${user.id }</li>
 			<li>Username: ${user.username }</li>
-			<li>Password: ${user.password }</li>
+			<%-- <li>Password: ${user.password }</li> --%>
 			<li>Nickname: ${user.nickname }</li>
 			<li>Email: ${user.email }<br/></li>
 		</ul>

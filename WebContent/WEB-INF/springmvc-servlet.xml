@@ -30,7 +30,7 @@
 		<property name="mappings">
 			<props>
 				<prop key="index.do">findJsp</prop><!-- 表示index.do转向index.jsp页面 -->
-				<prop key="first.do">findJsp</prop>
+				<prop key="login.do">findJsp</prop>
 			</props>
 		</property>
 	</bean>

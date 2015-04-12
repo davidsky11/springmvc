@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="WEB-INF/jsp/common/head.jsp" %>
+<%@ include file="common/head.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +16,7 @@
 	<title>bootstrap登陆</title>
 </head>
 <body>
-	<form class="form-horizontal" action="user/login" method="post" >
+	<form class="form-horizontal" action="login" method="post" >
 		<div class="container">
 			<a href="#login" data-toggle="modal" class="btn btn-primary">点击登录</a>
 			<div class="modal hide fade" id="login"><!-- fade 动画 -->

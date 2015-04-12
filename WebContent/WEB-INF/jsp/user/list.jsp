@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="../common/head.jsp" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -15,11 +16,16 @@
 <body>
 	<div class="container">
 		<h1>用户列表页面</h1>
-		<h2>
-			<a href="add">用户添加</a> 
-		</h2>
+		<h3>
+			<a href="add">用户添加</a>
+		</h3>
+		<h3>
+			<c:if test="${not empty loginUser }">
+			当前用户： ${loginUser.nickname }
+				<a href="<%=basePath %>/logout">退出</a> 
+			</c:if>
+		</h3>
 		<hr/>
-		--${LoginUser.nickname }
 		<br/>
 		<table class="table table-striped">
 			<thead>
@@ -42,7 +48,7 @@
 					<tr>
 						<th>${um.id }</th>
 						<th>${um.username }</th>
-						<th><a href="${um.username }">${um.nickname }</a></th>
+						<th><a href="${um.id }">${um.nickname }</a></th>
 						<th>${um.password }</th>
 						<th>${um.email }</th>
 						<th><a href="${um.username }/update">更新</a></th>
