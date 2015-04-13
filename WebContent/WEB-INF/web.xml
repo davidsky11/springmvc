@@ -12,15 +12,21 @@
 		<param-name>log4jRefreshInterval</param-name>
 		<param-value>60000</param-value>
 	</context-param>
-	<!-- <context-param>
+	<!-- 定义Log4J监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	
+	<!-- 设置Spring容器加载配置文件路径 -->
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/configs/applicationContext.xml</param-value>
+		<param-value>classpath:configs/applicationContext.xml</param-value>
 	</context-param>
 	
-	Spring监听
+	<!-- 加载Spring容器配置 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener> -->
+	</listener>
 	
 	<!-- 进行字符编码处理的filter，必须在OpenSessionInViewrFilter之前 -->
 	<filter>
@@ -36,7 +42,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- Spring MVC DispatcherServlet -->
+	<!-- 配置Spring核心控制器 -->
 	<servlet>
 		<servlet-name>springmvc</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

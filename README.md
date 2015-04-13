@@ -1,2 +1,2 @@
 # springmvc
-一个简单的例子  -  测试SpringMVC框架 和 REST
+一个简单的例子  -  测试SpringMVC3.2.6 和 MyBatis3.2.8
