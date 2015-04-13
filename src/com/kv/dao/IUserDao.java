@@ -8,6 +8,7 @@ public interface IUserDao {
 	public void delete(User user);
 	public void update(User user);
 	public User getById(int id);
+	public int countAll();
 	
 	
 }

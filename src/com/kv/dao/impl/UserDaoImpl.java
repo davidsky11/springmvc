@@ -32,4 +32,10 @@ public class UserDaoImpl implements IUserDao {
 		return null;
 	}
 
+	@Override
+	public int countAll() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

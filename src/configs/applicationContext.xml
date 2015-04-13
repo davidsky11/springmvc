@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:p="http://www.springframework.org/schema/p"
@@ -11,7 +10,6 @@
 	xmlns:lang="http://www.springframework.org/schema/lang"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
@@ -21,17 +19,14 @@
 			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
 			http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.2.xsd
 			http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-			http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
-     		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd" >
+			http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd" >
 			
 	<description>Spring公共配置</description>
 	
 	<context:annotation-config />
 	
 	<!-- 扫描加载除了@Controller以外的组件 -->
-	<context:component-scan base-package="com.fsvm" use-default-filters="false" >
-		<context:exclude-filter type="annotation" expression="com.fsvm.controller" />
-	</context:component-scan>
+	<context:component-scan base-package="com.kv" />
 	
 	<!-- 定义数据源连接 -->
 	<!-- <bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
@@ -49,16 +44,20 @@
 	<!-- 定义SqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="mapperLocations" value="classpath*:configs/mybatis-config.xml" />
+		<!-- <property name="configLocation" value="classpath:configs/mybatis-config.xml" /> -->
+		<property name="mapperLocations" >
+            <list>
+                <value>classpath:com/kv/mapper/*_mapper.xml</value>
+                <value>classpath:com/kv/model/*_resultmap.xml</value>
+            </list>
+        </property>
 		<property name="typeAliasesPackage" value="com.kv.model" />
 		<property name="typeAliases" value="org.springframework.util.LinkedCaseInsensitiveMap" />
+	</bean>
 	
-		<property name="mapperLocations">
-			<list>
-				<value>classpath:com/kv/model/*.xml</value>
-			</list>
-		</property>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.kv.mapper" />
+		<property name="sqlSessionFactory" value="sqlSessionFactory" />
 	</bean>
 	
 	<!-- 配置SqlSessionTemplate -->  
@@ -66,13 +65,13 @@
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
     </bean>
 
+	<!-- 开启注解方式声明事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	
  	<!-- 定义事务控制器 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	
-	<!-- 开启注解方式声明事务 -->
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
 	<!-- production环境 -->
 	<beans profile="production">
