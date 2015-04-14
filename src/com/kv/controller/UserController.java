@@ -3,12 +3,15 @@ package com.kv.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,20 +26,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kv.exception.UserException;
 import com.kv.model.User;
+import com.kv.service.IUserService;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	
+	private static Logger logger = Logger.getLogger(UserController.class);
+	
+	@Autowired
+	private IUserService userService;
 
 	private Map<String, User> users = new HashMap<String, User>();
 	
 	public UserController() {
-		users.put("kv", new User("ls", "123", "李四", "sss"));
-		users.put("kv", new User("zs", "123", "张三", "sss"));
-		users.put("kv", new User("ww", "123", "王五", "sss"));
-		users.put("cl", new User("cl", "123", "陈亮", "ttt"));
-		users.put("wst", new User("wst", "123", "王思婷", "uuu"));
-		users.put("zcw", new User("zcw", "123", "詹成伟", "vvv"));
+		
 	}
 	
 	@RequestMapping(value = "/users", method=RequestMethod.GET)
@@ -53,11 +57,12 @@ public class UserController {
 //		model.addAttribute(new User());		return "user/add";
 //	}  // 法一
 	
-	@RequestMapping(value = "/add", method=RequestMethod.GET)
-	public String add(@ModelAttribute("user") User user) {
+	@RequestMapping(value = "/regist", method=RequestMethod.GET)
+	public String regist(@ModelAttribute("user") User user) {
 		// 开启modelDriven
-//		model.addAttribute(new User());		
-		return "user/add";
+//		model.addAttribute(new User());	
+		logger.info("get into regist(post)...");
+		return "user/regist";
 	} // 法二
 	
 	// 在具体添加用户时，是post请求，就访问以下代码
@@ -128,15 +133,24 @@ public class UserController {
 	
 	@RequestMapping(value = "/login", method=RequestMethod.POST)
 	public String login(String username, String password, HttpSession session) {
-		if (!users.containsKey(username)) {
-			throw new UserException("用户名不存在！");
-		}
-		User user = users.get(username);
-		if (!user.getPassword().equals(password)) {
-			throw new UserException("用户密码不正确！");
-		}
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		List<User> userList = userService.selectUser(user);
 		
-		session.setAttribute("LoginUser", user);
+		if (userList.size() > 0) {
+			session.setAttribute("loginUser", userList.get(0));
+			return "redirect:/user/users";
+		} else {
+			throw new UserException("用户名/密码不正确！");
+		}
+	}
+	
+	@RequestMapping(value = "/regist", method=RequestMethod.POST)
+	public String regist(User user, BindingResult rs) {
+		logger.info("get into regist(post)...");
+		
+		userService.addUser(user);
 		return "redirect:/user/users";
 	}
 	

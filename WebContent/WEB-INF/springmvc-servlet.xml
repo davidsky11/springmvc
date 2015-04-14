@@ -20,11 +20,12 @@
 	<!-- 注解驱动，此句必须加上validator属性指向beanvalidator的bean中的id -->
 	<mvc:annotation-driven validator="validator" />
 		
-	<!-- 扫描包（项目中使用较多） -->
+	<!-- 扫描controller包（项目中使用较多） -->
 	<context:component-scan base-package="com.kv.controller" />
 	
 	<!-- Annotation默认的方法映射适配器 -->
 	<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	<!-- 完成请求和注解POJO的映射 -->
 	<bean id="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 	
 	<!-- 用于页面跳转，根据请求的不同跳转到不同页面，如请求index.do则跳转到/WEB-INF/jsp/index.jsp -->
@@ -108,7 +109,7 @@
 		</property>
 	</bean>
 	
-	<!-- 上传拦截 -->
+	<!-- 文件上传拦截器 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="800000" />
 		<property name="maxInMemorySize" value="4096" />

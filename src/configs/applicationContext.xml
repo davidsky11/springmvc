@@ -1,84 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop" 
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:jee="http://www.springframework.org/schema/jee"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:lang="http://www.springframework.org/schema/lang"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
 			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
-			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
-			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
-			http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.2.xsd
-			http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-			http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
-     		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd" >
+			http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd" >
 			
 	<description>Spring公共配置</description>
 	
-	<context:annotation-config />
+	<!-- <context:annotation-config /> -->
 	
 	<!-- 扫描加载除了@Controller以外的组件 -->
-	<context:component-scan base-package="com.fsvm" use-default-filters="false" >
-		<context:exclude-filter type="annotation" expression="com.fsvm.controller" />
-	</context:component-scan>
+	<!-- <context:component-scan base-package="com.kv" /> -->
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:configs/jdbc.properties" />
+	</bean>
 	
 	<!-- 定义数据源连接 -->
-	<!-- <bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="${jdbc.properties}" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
-		<property name="maxActive" value="50" />
-        <property name="maxIdle" value="30" />
-        <property name="maxWait" value="5000" />
-        <property name="validationQuery" value="select 1" />
-        <property name="testOnBorrow" value="true" />
-	</bean> -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
+		<property name="driverClassName" value="${jdbc.mysql.driver}" />
+		<property name="url" value="${jdbc.mysql.url}" />
+		<property name="username" value="${jdbc.mysql.username}" />
+		<property name="password" value="${jdbc.mysql.password}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
+        <property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+        <property name="maxWait" value="${jdbc.maxWait}" />
+        <property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"/>
+        <property name="removeAbandoned" value="${jdbc.removeAbandoned}"/>
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}"/>
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+        <property name="numTestsPerEvictionRun" value="${jdbc.numTestsPerEvictionRun}"/>
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
+	</bean>
 	
-	<!-- 定义SqlSessionFactory -->
+	<!-- 会话工厂 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="mapperLocations" value="classpath*:configs/mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="com.kv.model" />
+		<property name="configLocation" value="classpath:configs/mybatis-config.xml" />
+		<!-- <property name="typeAliasesPackage" value="com.kv.model" /> -->
 		<property name="typeAliases" value="org.springframework.util.LinkedCaseInsensitiveMap" />
 	
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:com/kv/model/*.xml</value>
+				<value>classpath:configs/mapper/*.xml</value>
 			</list>
 		</property>
 	</bean>
 	
-	<!-- 配置SqlSessionTemplate -->  
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
-        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
-    </bean>
-
- 	<!-- 定义事务控制器 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<!-- mybatis.spring自动映射（spring和mybatis整合） -->
+	<!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.kv.model" />
+	</bean> -->
+	
+	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.kv.dao.IUserDao" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	
-	<!-- 开启注解方式声明事务 -->
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	<bean id="userSerivce" class="com.kv.service.impl.UserServiceImpl" >
+		<property name="userDao" ref="userDao" />
+	</bean>
 	
+	<!-- 配置SqlSessionTemplate -->  
+    <!-- <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
+    </bean> -->
+
+ 	<!-- 定义事务控制器 -->
+	<!-- <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="select*" propagation="SUPPORTS" />
+			<tx:method name="add*" propagation="SUPPORTS" />
+		</tx:attributes>
+	</tx:advice> -->
+	
+	<!-- 开启注解方式声明事务 -->
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	 -->
+	 
 	<!-- production环境 -->
+	<!-- 
 	<beans profile="production">
 		<context:property-placeholder ignore-resource-not-found="false" location="classpath*:/jdbc.properties" />
 		
-		<!-- 数据源配置，使用DBCP数据库连接池 -->
 		<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
 			<property name="driverClassName" value="${jdbc.properties}" />
 			<property name="url" value="${jdbc.url}" />
@@ -90,16 +111,9 @@
 	        <property name="validationQuery" value="select 1" />
 	        <property name="testOnBorrow" value="true" />
 		</bean>
-		
-		<!-- 数据源配置，使用应用内的C3P0数据库连接池 -->
-		<!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-			<property name="driverClass" value="${jdbc.driver}" />
-			<property name="jdbcUrl" value="${jdbc.url}" />
-			<prrperty name="user" value="${jdbc.username}" />
-			<property name="password" value="${jdbc.password}" />
-		</bean> -->
 	</beans>
-	
+	 -->
+	 
 	<!-- ///////////////////////////////// AOP SETUP AREA //////////////////////////////////////// -->
 		
 	<!-- 权限控制器 -->

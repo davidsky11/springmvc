@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class User {
 
+	private Integer id;
 	private String username;
 	private String nickname;
 	private String password;
@@ -24,6 +25,24 @@ public class User {
 		this.email = email;
 	}
 
+
+	public User(Integer id, String username, String nickname, String password,
+			String email) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nickname = nickname;
+		this.password = password;
+		this.email = email;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	@NotEmpty(message = "用户名不能为空")
 	public String getUsername() {

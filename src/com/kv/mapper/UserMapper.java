@@ -1,10 +1,10 @@
-package com.kv.dao;
+package com.kv.mapper;
 
 import java.util.List;
 
 import com.kv.model.User;
 
-public interface IUserDao {
+public interface UserMapper {
 
 	public List<User> selectUser(User user);
 	public void addUser(User user);
