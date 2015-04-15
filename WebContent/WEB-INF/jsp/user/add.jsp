@@ -43,7 +43,7 @@
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="email">附件</label>
+				<label class="control-label" for="attach">附件</label>
 				<div class="controls">
 					<input id="attach" type="file" name="attach"/>
 				</div>

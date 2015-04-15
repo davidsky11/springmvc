@@ -1,15 +1,11 @@
 package com.kv.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,14 +33,13 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-	private Map<String, User> users = new HashMap<String, User>();
-	
 	public UserController() {
 		
 	}
 	
 	@RequestMapping(value = "/users", method=RequestMethod.GET)
 	public String list(Model model) {
+		List<User> users = userService.listUser();
 		model.addAttribute("users", users);
 		return "user/list";
 	}
@@ -57,12 +52,13 @@ public class UserController {
 //		model.addAttribute(new User());		return "user/add";
 //	}  // 法一
 	
-	@RequestMapping(value = "/regist", method=RequestMethod.GET)
-	public String regist(@ModelAttribute("user") User user) {
+	@RequestMapping(value = "/add", method=RequestMethod.GET)
+	public String add(@ModelAttribute("user") User user, Model model) {
 		// 开启modelDriven
-//		model.addAttribute(new User());	
-		logger.info("get into regist(post)...");
-		return "user/regist";
+		model.addAttribute(new User());	
+		logger.info("get into add(post)...");
+		
+		return "user/add";
 	} // 法二
 	
 	// 在具体添加用户时，是post请求，就访问以下代码
@@ -71,10 +67,14 @@ public class UserController {
 		if (br.hasErrors()) {
 			return "user/add";			// 如果又错误，直接跳转add视图
 		}
-		String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
-		File f = new File(realPath + "/" + attach.getOriginalFilename());
-		FileUtils.copyInputStreamToFile(attach.getInputStream(), f);
-		users.put(user.getUsername(), user);
+//		String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
+//		File f = new File(realPath + "/" + attach.getOriginalFilename());
+//		FileUtils.copyInputStreamToFile(attach.getInputStream(), f);
+		
+		logger.info("get into regist(post)...");
+		logger.info(user.toString());
+		
+		userService.addUser(user);
 		return "redirect:/user/users";			// 客户端跳转
 	}
 	
@@ -100,19 +100,21 @@ public class UserController {
 	
 	@RequestMapping(value = "/{username}", method=RequestMethod.GET)
 	public String show(@PathVariable String username, Model model) {
-		model.addAttribute(users.get(username));
+		User user = userService.selectUserByName(username);
+		model.addAttribute(user);
 		return "user/show";
 	}
 	
 	@RequestMapping(value = "/{username}", method=RequestMethod.GET, params="json")
 	@ResponseBody
 	public User show(@PathVariable String username) {
-		return users.get(username);
+		return userService.selectUserByName(username);
 	}
 	
 	@RequestMapping(value = "/{username}/update", method=RequestMethod.GET)
 	public String update(@PathVariable String username, Model model) {
-		model.addAttribute(users.get(username));
+		User user = userService.selectUserByName(username);
+		model.addAttribute(user);
 		return "user/update";
 	}
 	
@@ -121,29 +123,45 @@ public class UserController {
 		if (br.hasErrors()) {
 			return "user/update";			// 如果又错误，直接跳转update视图
 		}
-		users.put(username, user);
+		userService.updateUser(user);
 		return "redirect:/user/users";
 	}
 	
 	@RequestMapping(value = "{username}/delete", method=RequestMethod.GET)
 	public String delete(@PathVariable String username) {
-		users.remove(username);
+		User user =  userService.selectUserByName(username);
+		if (null == user) {
+			
+		} else {
+			userService.deleteUser(user.getId());
+		}
 		return "redirect:/user/users";
 	}
 	
 	@RequestMapping(value = "/login", method=RequestMethod.POST)
 	public String login(String username, String password, HttpSession session) {
+		logger.info("get into login(post)...");
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
+		logger.info("login... \nusername - " + username + "\npassword - " + password);
+		logger.info(" userService - " + userService);
 		List<User> userList = userService.selectUser(user);
 		
+		logger.info("符合条件的用户数 : " + userList.size());
 		if (userList.size() > 0) {
 			session.setAttribute("loginUser", userList.get(0));
 			return "redirect:/user/users";
 		} else {
 			throw new UserException("用户名/密码不正确！");
 		}
+	}
+	
+	@RequestMapping(value = "/regist", method=RequestMethod.GET)
+	public String regist(@ModelAttribute("user") User user) {
+		// 开启modelDriven
+		logger.info("get into regist(post)...");
+		return "user/regist";
 	}
 	
 	@RequestMapping(value = "/regist", method=RequestMethod.POST)

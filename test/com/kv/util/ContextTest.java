@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.kv.model.User;
 import com.kv.service.IUserService;
 
 public class ContextTest extends JunitTestBase {

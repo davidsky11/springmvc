@@ -50,11 +50,11 @@
 		<!-- <property name="typeAliasesPackage" value="com.kv.model" /> -->
 		<property name="typeAliases" value="org.springframework.util.LinkedCaseInsensitiveMap" />
 	
-		<property name="mapperLocations">
+		<!-- <property name="mapperLocations">
 			<list>
 				<value>classpath:configs/mapper/*.xml</value>
 			</list>
-		</property>
+		</property> -->
 	</bean>
 	
 	<!-- mybatis.spring自动映射（spring和mybatis整合） -->
@@ -62,8 +62,12 @@
 		<property name="basePackage" value="com.kv.model" />
 	</bean> -->
 	
-	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<!-- <bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.kv.dao.IUserDao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean> -->
+	
+	<bean id="userDao" class="com.kv.dao.impl.UserDaoImpl" >
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	

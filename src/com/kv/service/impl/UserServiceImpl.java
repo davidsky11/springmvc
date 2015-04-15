@@ -2,18 +2,12 @@ package com.kv.service.impl;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import com.kv.dao.IUserDao;
 import com.kv.model.User;
 import com.kv.service.IUserService;
 
-@Service("userService")
 public class UserServiceImpl implements IUserService {
 
-	@Resource
 	private IUserDao userDao;
 	
 	public IUserDao getUserDao() {
@@ -36,12 +30,32 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public boolean existUser(String username) {
-		List<User> userList = userDao.selectUserByName(username);
-		if (userList.size() > 0) {
+		User user = userDao.selectUserByName(username);
+		if (null != user) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public User selectUserByName(String username) {
+		return userDao.selectUserByName(username);
+	}
+
+	@Override
+	public void updateUser(User user) {
+		userDao.updateUser(user);
+	}
+
+	@Override
+	public void deleteUser(int id) {
+		userDao.deleteUser(id);
+	}
+
+	@Override
+	public List<User> listUser() {
+		return userDao.listUser();
 	}
 
 }
