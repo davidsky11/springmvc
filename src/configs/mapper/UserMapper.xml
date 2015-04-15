@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
-  
-<mapper namespace="com.kv.mapper.UserMapper">
-	
-	<!-- 配置结果映射 -->
-	<resultMap type="com.kv.model.User" id="userMap">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.kv.dao.IUserDao">
+
+	<resultMap type="User" id="userMap">
 		<id property="id" column="id" />
 		<result property="username" column="username" />
 		<result property="password" column="password" />
@@ -12,8 +11,10 @@
 		<result property="email" column="email" />
 	</resultMap>
 	
-	<select id="selectUser" parameterType="User" resultType="java.util.List" resultMap="userMap">
-		select * from t_user where username = #{username} and password = #{password}
+	<select id="find" parameterType="User" resultType="java.util.List" resultMap="userMap">
+		select * from t_user where 
+		username = #{username} and 
+		password = #{password}
 	</select>
 	
 	<select id="listUser" resultType="java.util.List" resultMap="userMap">

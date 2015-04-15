@@ -47,7 +47,7 @@
     <!-- Register Mapper -->
     <mappers>
         <!-- SQL Mapper -->
-        <mapper resource="classpath:configs/UserMapper.xml" />
+        <mapper resource="configs/mapper/UserMapper.xml" />
     </mappers>
     
 </configuration>

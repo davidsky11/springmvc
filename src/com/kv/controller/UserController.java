@@ -2,12 +2,14 @@ package com.kv.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,8 @@ import com.kv.service.IUserService;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	
+	private static Logger logger = Logger.getLogger(UserController.class);
 
 	@Resource
 	private IUserService userService;
@@ -37,7 +41,11 @@ public class UserController {
 	
 	@RequestMapping(value = "/users", method=RequestMethod.GET)
 	public String list(Model model) {
-		model.addAttribute("users", null);
+		logger.info("get into list...");
+		List<User> users = userService.listAll();
+		
+		logger.info("list.size - " + users.size());
+		model.addAttribute("users", users);
 		return "user/list";
 	}
 	
@@ -132,8 +140,12 @@ public class UserController {
 //		if (!user.getPassword().equals(password)) {
 //			throw new UserException("用户密码不正确！");
 //		}
-//		
-//		session.setAttribute("LoginUser", user);
+		
+		logger.info("login ... \nusername - " + username + "\npassword - " + password);
+		
+		User user = userService.login(username, password);
+		session.setAttribute("loginUser", user);
+		
 		return "redirect:/user/users";
 	}
 	

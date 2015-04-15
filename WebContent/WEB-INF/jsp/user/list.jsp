@@ -17,7 +17,7 @@
 	<h1>
 		<a href="add">添加</a> 
 	</h1>
-	--${LoginUser.nickname }
+	--${loginUser.nickname }
 	<br/>
 	<table class="table table-striped">
 		<thead>
@@ -31,12 +31,13 @@
 			</tr>
 		</thead>
 		<c:forEach items="${users }" var="um">
-			<tr><th>${um.value.username }</th>
-				<th><a href="${um.value.username }">${um.value.nickname }</a></th>
-				<th>${um.value.password }</th>
-				<th>${um.value.email }</th>
-				<th><a href="${um.value.username }/update">修改</a></th>
-				<th><a href="${um.value.username }/delete">删除</a></th>
+			<tr>
+				<th>${um.username }</th>
+				<th><a href="${um.username }">${um.nickname }</a></th>
+				<th>${um.password }</th>
+				<th>${um.email }</th>
+				<th><a href="${um.username }/update">修改</a></th>
+				<th><a href="${um.username }/delete">删除</a></th>
 			</tr>
 		</c:forEach>
 	</table>

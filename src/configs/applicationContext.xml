@@ -29,7 +29,10 @@
 	<context:component-scan base-package="com.kv" />
 	
 	<!-- 配置数据源属性文件 -->
-	<context:property-placeholder location="classpath:configs/jdbc.properties" />
+	<!-- <context:property-placeholder location="classpath:configs/jdbc.properties" /> -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:configs/jdbc.properties" />
+	</bean>
 	
 	<!-- 定义数据源连接 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
@@ -55,41 +58,41 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:configs/mybatis-config.xml" />
+		<!-- <property name="typeAliasesPackage" value="com.kv.model" /> -->
+		<property name="typeAliases" value="org.springframework.util.LinkedCaseInsensitiveMap" />
 		<!-- <property name="mapperLocations" >
             <list>
                 <value>classpath:com/kv/mapper/*_mapper.xml</value>
                 <value>classpath:com/kv/model/*_resultmap.xml</value>
             </list>
         </property> -->
-		<!-- <property name="typeAliasesPackage" value="com.kv.model" /> -->
-		<property name="typeAliases" value="org.springframework.util.LinkedCaseInsensitiveMap" />
 	</bean>
 	
 	<!-- mybatis自动扫描器 -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<!-- 要扫描的包，即Mapper接口所在的包，如果存在多个包，则在每个包之间用半角','隔开 -->
+	<!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		要扫描的包，即Mapper接口所在的包，如果存在多个包，则在每个包之间用半角','隔开
 		<property name="basePackage" value="com.kv.mapper" />
-		<property name="sqlSessionFactory" value="sqlSessionFactory" />
-	</bean>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean> -->
 	
+	<!-- 创建数据映射器，数据映射器必须为接口 -->
 	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.kv.mapper.UserMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	
 	<!-- 配置SqlSessionTemplate -->  
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
+    <!-- <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
-    </bean>
+    </bean> -->
 
 	<!-- 开启注解方式声明事务 -->
-	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" /> -->
 	
  	<!-- 定义事务控制器 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-	</bean>
-	
+	</bean> -->
 	
 	<!-- ///////////////////////////////// AOP SETUP AREA //////////////////////////////////////// -->
 		
