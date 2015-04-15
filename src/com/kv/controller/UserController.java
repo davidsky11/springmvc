@@ -2,9 +2,8 @@ package com.kv.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -23,25 +22,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kv.exception.UserException;
 import com.kv.model.User;
+import com.kv.service.IUserService;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
-	private Map<String, User> users = new HashMap<String, User>();
+	@Resource
+	private IUserService userService;
 	
 	public UserController() {
-		users.put("kv", new User("ls", "123", "李四", "sss"));
-		users.put("kv", new User("zs", "123", "张三", "sss"));
-		users.put("kv", new User("ww", "123", "王五", "sss"));
-		users.put("cl", new User("cl", "123", "陈亮", "ttt"));
-		users.put("wst", new User("wst", "123", "王思婷", "uuu"));
-		users.put("zcw", new User("zcw", "123", "詹成伟", "vvv"));
+		
 	}
 	
 	@RequestMapping(value = "/users", method=RequestMethod.GET)
 	public String list(Model model) {
-		model.addAttribute("users", users);
+		model.addAttribute("users", null);
 		return "user/list";
 	}
 	
@@ -69,7 +65,7 @@ public class UserController {
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
 		File f = new File(realPath + "/" + attach.getOriginalFilename());
 		FileUtils.copyInputStreamToFile(attach.getInputStream(), f);
-		users.put(user.getUsername(), user);
+//		users.put(user.getUsername(), user);
 		return "redirect:/user/users";			// 客户端跳转
 	}
 	
@@ -95,19 +91,20 @@ public class UserController {
 	
 	@RequestMapping(value = "/{username}", method=RequestMethod.GET)
 	public String show(@PathVariable String username, Model model) {
-		model.addAttribute(users.get(username));
+//		model.addAttribute(users.get(username));
 		return "user/show";
 	}
 	
 	@RequestMapping(value = "/{username}", method=RequestMethod.GET, params="json")
 	@ResponseBody
 	public User show(@PathVariable String username) {
-		return users.get(username);
+//		return users.get(username);
+		return null;
 	}
 	
 	@RequestMapping(value = "/{username}/update", method=RequestMethod.GET)
 	public String update(@PathVariable String username, Model model) {
-		model.addAttribute(users.get(username));
+//		model.addAttribute(users.get(username));
 		return "user/update";
 	}
 	
@@ -116,27 +113,27 @@ public class UserController {
 		if (br.hasErrors()) {
 			return "user/update";			// 如果又错误，直接跳转update视图
 		}
-		users.put(username, user);
+//		users.put(username, user);
 		return "redirect:/user/users";
 	}
 	
 	@RequestMapping(value = "{username}/delete", method=RequestMethod.GET)
 	public String delete(@PathVariable String username) {
-		users.remove(username);
+//		users.remove(username);
 		return "redirect:/user/users";
 	}
 	
 	@RequestMapping(value = "/login", method=RequestMethod.POST)
 	public String login(String username, String password, HttpSession session) {
-		if (!users.containsKey(username)) {
-			throw new UserException("用户名不存在！");
-		}
-		User user = users.get(username);
-		if (!user.getPassword().equals(password)) {
-			throw new UserException("用户密码不正确！");
-		}
-		
-		session.setAttribute("LoginUser", user);
+//		if (!users.containsKey(username)) {
+//			throw new UserException("用户名不存在！");
+//		}
+//		User user = users.get(username);
+//		if (!user.getPassword().equals(password)) {
+//			throw new UserException("用户密码不正确！");
+//		}
+//		
+//		session.setAttribute("LoginUser", user);
 		return "redirect:/user/users";
 	}
 	
