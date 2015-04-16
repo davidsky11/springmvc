@@ -2,44 +2,49 @@ package com.kv.dao.impl;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Repository;
 
 import com.kv.dao.IUserDao;
-import com.kv.model.User;
+import com.kv.domain.User;
+import com.kv.domain.mappers.UserMapper;
 
 @Repository("userDao")
 public class UserDaoImpl implements IUserDao {
-
-	private SqlSessionFactory sqlSessionFactory;
 	
-	public SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
+	private UserMapper userMapper;
+	
+	public UserMapper getUserMapper() {
+		return userMapper;
 	}
 
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		this.sqlSessionFactory = sqlSessionFactory;
+	@Resource
+	public void setUserMapper(UserMapper userMapper) {
+		this.userMapper = userMapper;
 	}
+
+//	private SqlSession sqlSession;
+//	
+//	public SqlSession getSqlSession() {
+//		return sqlSession;
+//	}
+//
+//	@Resource
+//	public void setSqlSession(SqlSession sqlSession) {
+//		this.sqlSession = sqlSession;
+//	}
 
 	/**
 	 * 查找指定用户
 	 */
 	@Override
-	public List<User> selectUser(User user) {
+	public User find(String username, String password) {
 //		SqlSession session = this.getSqlSession();
 //		List<User> userList = session.selectList("user.selectUser", user);
 //		return userList;
 		
-		SqlSession session = sqlSessionFactory.openSession();
-		List<User> userList = null;
-		try {
-			userList = session.selectList("user.selectUser", user);
-		} finally {
-			session.close();
-		}
-		
-		return userList;
+		return userMapper.find(username, password);
 	}
 
 	/**
@@ -50,13 +55,7 @@ public class UserDaoImpl implements IUserDao {
 //		SqlSession session = this.getSqlSession();
 //		session.insert("user", user);
 	
-		SqlSession session = sqlSessionFactory.openSession();
-		try {
-			session.insert("user.addUser", user);
-			session.commit();
-		} finally {
-			session.close();
-		}
+		userMapper.insert(user);
 	}
 
 	/**
@@ -68,15 +67,17 @@ public class UserDaoImpl implements IUserDao {
 //		User user = session.selectOne("user.selectUserByName", username);
 //		return user;
 		
-		SqlSession session = sqlSessionFactory.openSession();
-		User user = null;
-		try {
-			user = session.selectOne("user.selectUserByName", username);
-		} finally {
-			session.close();
-		}
+//		SqlSession session = sqlSessionFactory.openSession();
+//		User user = null;
+//		try {
+//			user = session.selectOne("user.selectUserByName", username);
+//		} finally {
+//			session.close();
+//		}
+//		
+//		return user;
 		
-		return user;
+		return null;
 	}
 
 	/**
@@ -88,15 +89,17 @@ public class UserDaoImpl implements IUserDao {
 //		List<User> userList = session.selectList("user.listUser");
 //		return userList;
 		
-		SqlSession session = sqlSessionFactory.openSession();
-		List<User> userList = null;
-		try {
-			userList = session.selectList("user.listUser");
-		} finally {
-			session.close();
-		}
+//		SqlSession session = sqlSessionFactory.openSession();
+//		List<User> userList = null;
+//		try {
+//			userList = session.selectList("user.listUser");
+//		} finally {
+//			session.close();
+//		}
+//		
+//		return userList;
 		
-		return userList;
+		return userMapper.list();
 	}
 
 	/**
@@ -107,13 +110,15 @@ public class UserDaoImpl implements IUserDao {
 //		SqlSession session = this.getSqlSession();
 //		session.update("user.updateUser", user);
 		
-		SqlSession session = sqlSessionFactory.openSession();
-		try {
-			session.update("user.updateUser", user);
-			session.commit();
-		} finally {
-			session.close();
-		}
+//		SqlSession session = sqlSessionFactory.openSession();
+//		try {
+//			session.update("user.updateUser", user);
+//			session.commit();
+//		} finally {
+//			session.close();
+//		}
+		
+		userMapper.update(user);
 	}
 
 	/**
@@ -124,13 +129,15 @@ public class UserDaoImpl implements IUserDao {
 //		SqlSession session = this.getSqlSession();
 //		session.delete("user.deleteUser", id);
 		
-		SqlSession session = sqlSessionFactory.openSession();
-		try {
-			session.delete("user.deleteUser", id);
-			session.commit();
-		} finally {
-			session.close();
-		}
+//		SqlSession session = sqlSessionFactory.openSession();
+//		try {
+//			session.delete("user.deleteUser", id);
+//			session.commit();
+//		} finally {
+//			session.close();
+//		}
+		
+		userMapper.delete(id);
 	}
 	
 	/**
@@ -141,13 +148,15 @@ public class UserDaoImpl implements IUserDao {
 //		SqlSession session = this.getSqlSession();
 //		session.delete("user.deleteUser", user);
 		
-		SqlSession session = sqlSessionFactory.openSession();
-		try {
-			session.delete("user.updateUser", user);
-			session.commit();
-		} finally {
-			session.close();
-		}
+//		SqlSession session = sqlSessionFactory.openSession();
+//		try {
+//			session.delete("user.updateUser", user);
+//			session.commit();
+//		} finally {
+//			session.close();
+//		}
+		
+		
 	}
 
 }

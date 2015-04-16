@@ -6,8 +6,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.kv.mapper.UserMapper;
-import com.kv.model.User;
+import com.kv.domain.User;
+import com.kv.domain.mappers.UserMapper;
 import com.kv.service.IUserService;
 
 @Service("userService")
@@ -23,32 +23,27 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public void register(User user) {
-		userMapper.save(user);
+		userMapper.insert(user);
 	}
 
 	@Override
 	public User getUserByName(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		return userMapper.getUserByName(username);
 	}
 
 	@Override
 	public List<User> listAll() {
-		return userMapper.listUser();
+		return userMapper.list();
 	}
 
 	@Override
 	public void updateUser(User user) {
-		// TODO Auto-generated method stub
-		
+		userMapper.update(user);
 	}
 
 	@Override
 	public void deleteUser(User user) {
-		// TODO Auto-generated method stub
-		
+		userMapper.delete(user.getId());
 	}
-	
-
 
 }

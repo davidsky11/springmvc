@@ -2,7 +2,7 @@ package com.kv.service;
 
 import java.util.List;
 
-import com.kv.model.User;
+import com.kv.domain.User;
 
 public interface IUserService {
 

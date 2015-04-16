@@ -2,11 +2,11 @@ package com.kv.dao;
 
 import java.util.List;
 
-import com.kv.model.User;
+import com.kv.domain.User;
 
 public interface IUserDao {
 
-	public List<User> selectUser(User user);
+	public User find(String username, String password);
 	public void addUser(User user);
 	public User selectUserByName(String username);
 	public List<User> listUser();

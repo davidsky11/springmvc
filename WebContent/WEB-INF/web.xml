@@ -67,6 +67,32 @@
 		<servlet-name>springmvc</servlet-name>
 	</filter-mapping>
 	
+	<!-- 激活Tomcat的defaultServlet来处理静态文件 -->
+	<servlet-mapping>  
+	    <servlet-name>default</servlet-name>  
+	    <url-pattern>*.jpg</url-pattern>  
+	</servlet-mapping>  
+	<servlet-mapping>  
+	    <servlet-name>default</servlet-name>  
+	    <url-pattern>*.gif</url-pattern>  
+	</servlet-mapping>  
+	<servlet-mapping>  
+	    <servlet-name>default</servlet-name>  
+	    <url-pattern>*.png</url-pattern>  
+	</servlet-mapping>  
+	<servlet-mapping>  
+	    <servlet-name>default</servlet-name>  
+	    <url-pattern>*.js</url-pattern>  
+	</servlet-mapping>  
+	<servlet-mapping>  
+	    <servlet-name>default</servlet-name>  
+	    <url-pattern>*.css</url-pattern>  
+	</servlet-mapping> 
+	
+	<session-config>
+		<session-timeout>30</session-timeout><!-- session的过期时间（单位：分钟） -->
+	</session-config>
+	
 	<display-name>SpringMVCDemo</display-name>
 	<welcome-file-list>
 		<welcome-file>/WEB-INF/jsp/welcome.jsp</welcome-file>

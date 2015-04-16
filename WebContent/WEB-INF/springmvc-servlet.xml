@@ -21,7 +21,7 @@
 	<mvc:annotation-driven validator="validator" />
 		
 	<!-- 扫描包（项目中使用较多） -->
-	<context:component-scan base-package="com.kv.controller" />
+	<context:component-scan base-package="com.kv.web.controller" />
 	
 	<!-- Annotation默认的方法映射适配器 -->
 	<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -77,7 +77,7 @@
 	</bean>
 	
 	<!-- 使用较少 -->
-	<bean name="/welcome.html" class="com.kv.controller.WelcomeController" ></bean>
+	<bean name="/welcome.html" class="com.kv.web.controller.WelcomeController" ></bean>
 	
 	<bean id="stringConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
 		<property name="supportedMediaTypes">

@@ -4,9 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
   
 <configuration>
-
 	<settings>  
-                <!-- 全局映射器启用缓存 -->  
+                <!-- 全局映射器启用缓存 -->
         <setting name="cacheEnabled" value="true" />  
                 <!-- 查询时，关闭关联对象即时加载以提高性能 -->  
         <setting name="lazyLoadingEnabled" value="true" />  
@@ -27,9 +26,9 @@
     </settings>  
     
     <!-- 配置类型别名 -->
-    <typeAliases>
-        <typeAlias alias="user" type="com.kv.model.User" />
-    </typeAliases>
+    <!-- <typeAliases>
+        <typeAlias alias="User" type="com.kv.domain.User" />
+    </typeAliases> -->
 
     <!-- 配置数据源 -->
     <!-- <environments default="development">

@@ -58,7 +58,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:configs/mybatis-config.xml" />
-		<!-- <property name="typeAliasesPackage" value="com.kv.model" /> -->
+		<property name="typeAliasesPackage" value="com.kv.domain" />
 		<property name="typeAliases" value="org.springframework.util.LinkedCaseInsensitiveMap" />
 		<!-- <property name="mapperLocations" >
             <list>
@@ -68,23 +68,29 @@
         </property> -->
 	</bean>
 	
+	<!-- <bean class="org.mybatis.spring.annotation.MapperScannerPostProcessor">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage" value="com.kv.mapper" />
+	</bean> -->
+	
 	<!-- mybatis自动扫描器 -->
 	<!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		要扫描的包，即Mapper接口所在的包，如果存在多个包，则在每个包之间用半角','隔开
-		<property name="basePackage" value="com.kv.mapper" />
+		<property name="basePackage" value="configs.mapper" />
+		<property name="annotationClass" value="com.kv.mapper.UserMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean> -->
 	
 	<!-- 创建数据映射器，数据映射器必须为接口 -->
 	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.kv.mapper.UserMapper" />
+		<property name="mapperInterface" value="com.kv.domain.mappers.UserMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	
-	<!-- 配置SqlSessionTemplate -->  
-    <!-- <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
+	<!-- 配置SqlSessionTemplate使用Sqlsession形式 -->  
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">  
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />  
-    </bean> -->
+    </bean>
 
 	<!-- 开启注解方式声明事务 -->
 	<!-- <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" /> -->
@@ -101,7 +107,26 @@
 	<!-- 权限管控 -->
 
 	<!-- 事务控制 -->
+	<!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+  	  <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+	</bean>   -->
 	
+	<!-- 配置事务的传播特性 -->  
+	<!-- <bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">  
+	    <property name="transactionManager" ref="transactionManager" />  
+	    <property name="transactionAttributes">  
+	        <props>  
+	            <prop key="add*">PROPAGATION_REQUIRED</prop>  
+	            <prop key="edit*">PROPAGATION_REQUIRED</prop>  
+	            <prop key="remove*">PROPAGATION_REQUIRED</prop>  
+	            <prop key="insert*">PROPAGATION_REQUIRED</prop>  
+	            <prop key="update*">PROPAGATION_REQUIRED</prop>  
+	            <prop key="del*">PROPAGATION_REQUIRED</prop>  
+	            <prop key="*">readOnly</prop>  
+	        </props>  
+	    </property>  
+	</bean> -->
+
 	<!-- 自动代理 -->
 	
 	<!-- 导入restful配置文件 -->

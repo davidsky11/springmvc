@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
-<mapper namespace="com.kv.dao.IUserDao">
+<mapper namespace="com.kv.domain.mappers.UserMapper">
 
 	<resultMap type="User" id="userMap">
 		<id property="id" column="id" />
@@ -10,6 +10,16 @@
 		<result property="nickname" column="nickname" />
 		<result property="email" column="email" />
 	</resultMap>
+	<!-- 
+	<sql id="userColumn">id, username, password, nickname, email</sql>
+	
+	<insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		insert into t_user(
+		<include refid="userColumn" />
+		) values (
+		#{username}, #{password}, #{nickname}, #{email}
+		)
+	</insert>
 	
 	<select id="find" parameterType="User" resultType="java.util.List" resultMap="userMap">
 		select * from t_user where 
@@ -17,8 +27,24 @@
 		password = #{password}
 	</select>
 	
-	<select id="listUser" resultType="java.util.List" resultMap="userMap">
+	<select id="list" resultType="java.util.List" resultMap="userMap">
     	select * from t_user
     </select>
-
+    
+    <update id="update" parameterType="User">
+    	update t_user set
+    	<trim suffixOverrides=",">去除生成的SQL语句后面的","
+    		<if test="username != null">username = #{usernmae}</if>
+    		<if test="password != null">password = #{password}</if>
+    		<if test="nickname != null">nickname = #{nickname}</if>
+    		<if test="email != null">email = #{email}</if>
+    	</trim>
+    	where id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="int">
+    	delete from t_user where
+    	id = #{id}
+    </delete>
+	 -->
 </mapper>

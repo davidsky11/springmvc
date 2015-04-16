@@ -1,4 +1,4 @@
-package com.kv.controller;
+package com.kv.web.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kv.domain.User;
 import com.kv.exception.UserException;
-import com.kv.model.User;
 import com.kv.service.IUserService;
 
 @Controller
@@ -50,19 +50,19 @@ public class UserController {
 	}
 	
 	// 链接到add页面时是GET请求，会访问这段代码
-//	@RequestMapping(value = "/add", method=RequestMethod.GET)
-//	public String add(Model model) {
-//		System.out.println("#############");
-//		// 开启modelDriven
-//		model.addAttribute(new User());		return "user/add";
-//	}  // 法一
+	/*
+	@RequestMapping(value = "/add", method=RequestMethod.GET)
+	public String add(Model model) {
+		// 开启modelDriven
+		model.addAttribute(new User());		return "user/add";
+	}  // 法一
+	*/
 	
 	@RequestMapping(value = "/add", method=RequestMethod.GET)
 	public String add(@ModelAttribute("user") User user) {
-		// 开启modelDriven
-//		model.addAttribute(new User());		
+		
 		return "user/add";
-	} // 法二
+	}
 	
 	// 在具体添加用户时，是post请求，就访问以下代码
 	@RequestMapping(value = "/add", method=RequestMethod.POST)
@@ -70,10 +70,15 @@ public class UserController {
 		if (br.hasErrors()) {
 			return "user/add";			// 如果又错误，直接跳转add视图
 		}
-		String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
-		File f = new File(realPath + "/" + attach.getOriginalFilename());
-		FileUtils.copyInputStreamToFile(attach.getInputStream(), f);
-//		users.put(user.getUsername(), user);
+		
+		if (!attach.isEmpty()) {
+			String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
+			File f = new File(realPath + "/" + attach.getOriginalFilename());
+			FileUtils.copyInputStreamToFile(attach.getInputStream(), f);
+		}
+
+		userService.register(user);
+		
 		return "redirect:/user/users";			// 客户端跳转
 	}
 	
@@ -99,52 +104,55 @@ public class UserController {
 	
 	@RequestMapping(value = "/{username}", method=RequestMethod.GET)
 	public String show(@PathVariable String username, Model model) {
-//		model.addAttribute(users.get(username));
+		User user = userService.getUserByName(username);
+		model.addAttribute(user);
 		return "user/show";
 	}
 	
 	@RequestMapping(value = "/{username}", method=RequestMethod.GET, params="json")
 	@ResponseBody
 	public User show(@PathVariable String username) {
-//		return users.get(username);
-		return null;
+		User user = userService.getUserByName(username);
+		return user;
 	}
 	
 	@RequestMapping(value = "/{username}/update", method=RequestMethod.GET)
 	public String update(@PathVariable String username, Model model) {
-//		model.addAttribute(users.get(username));
+		User user = userService.getUserByName(username);
+		model.addAttribute(user);
 		return "user/update";
 	}
 	
 	@RequestMapping(value = "/{username}/update", method=RequestMethod.POST)
 	public String update(@PathVariable String username, @Validated User user, BindingResult br) {
 		if (br.hasErrors()) {
+			logger.error("传入的用户数据不对，重新编辑...");
 			return "user/update";			// 如果又错误，直接跳转update视图
 		}
-//		users.put(username, user);
+		
+		userService.updateUser(user);
+		
 		return "redirect:/user/users";
 	}
 	
 	@RequestMapping(value = "{username}/delete", method=RequestMethod.GET)
 	public String delete(@PathVariable String username) {
-//		users.remove(username);
+		User user = userService.getUserByName(username);
+		if (null != user)	userService.deleteUser(user);
+		
 		return "redirect:/user/users";
 	}
 	
 	@RequestMapping(value = "/login", method=RequestMethod.POST)
 	public String login(String username, String password, HttpSession session) {
-//		if (!users.containsKey(username)) {
-//			throw new UserException("用户名不存在！");
-//		}
-//		User user = users.get(username);
-//		if (!user.getPassword().equals(password)) {
-//			throw new UserException("用户密码不正确！");
-//		}
-		
 		logger.info("login ... \nusername - " + username + "\npassword - " + password);
 		
 		User user = userService.login(username, password);
-		session.setAttribute("loginUser", user);
+		if (null != user) {
+			session.setAttribute("loginUser", user);
+		} else {
+			throw new UserException("用户名/密码不正确!");
+		}
 		
 		return "redirect:/user/users";
 	}

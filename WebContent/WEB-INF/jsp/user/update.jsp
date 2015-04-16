@@ -17,6 +17,7 @@
 		<sf:form class="form-horizontal" method="post" modelAttribute="user"><br/>
 			<fieldset>
 			<legend>更新用户信息</legend>
+			<sf:hidden id="id" path="id"/>
 			<div class="control-group">
 				<label class="control-label" for="username">用户名</label>
 				<div class="controls">

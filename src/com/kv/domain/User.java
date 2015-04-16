@@ -1,12 +1,19 @@
-package com.kv.model;
+package com.kv.domain;
+
+import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
+import org.apache.ibatis.type.Alias;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class User {
+@Alias("User")
+public class User implements Serializable {
 
+	private static final long serialVersionUID = -674520540207871580L;
+	
+	private Integer id;
 	private String username;
 	private String nickname;
 	private String password;
@@ -23,7 +30,24 @@ public class User {
 		this.password = password;
 		this.email = email;
 	}
+	
+	public User(Integer id, String username, String nickname, String password,
+			String email) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nickname = nickname;
+		this.password = password;
+		this.email = email;
+	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	@NotEmpty(message = "用户名不能为空")
 	public String getUsername() {
@@ -104,6 +128,13 @@ public class User {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", nickname="
+				+ nickname + ", password=" + password + ", email=" + email
+				+ "]";
 	}
 	
 }
