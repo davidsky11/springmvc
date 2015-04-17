@@ -8,12 +8,13 @@ import org.apache.ibatis.type.Alias;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-@Alias("User")
+@Alias("user")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -674520540207871580L;
 	
-	private Integer id;
+	private int userId;
+	private Role role;
 	private String username;
 	private String nickname;
 	private String password;
@@ -31,22 +32,30 @@ public class User implements Serializable {
 		this.email = email;
 	}
 	
-	public User(Integer id, String username, String nickname, String password,
+	public User(int userId, String username, String nickname, String password,
 			String email) {
 		super();
-		this.id = id;
+		this.userId = userId;
 		this.username = username;
 		this.nickname = nickname;
 		this.password = password;
 		this.email = email;
 	}
 
-	public Integer getId() {
-		return id;
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	@NotEmpty(message = "用户名不能为空")
@@ -93,6 +102,8 @@ public class User implements Serializable {
 				+ ((nickname == null) ? 0 : nickname.hashCode());
 		result = prime * result
 				+ ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + userId;
 		result = prime * result
 				+ ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -122,6 +133,13 @@ public class User implements Serializable {
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (userId != other.userId)
+			return false;
 		if (username == null) {
 			if (other.username != null)
 				return false;
@@ -132,9 +150,9 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", nickname="
-				+ nickname + ", password=" + password + ", email=" + email
-				+ "]";
+		return "User [userId=" + userId + ", role=" + role + ", username="
+				+ username + ", nickname=" + nickname + ", password="
+				+ password + ", email=" + email + "]";
 	}
-	
+
 }

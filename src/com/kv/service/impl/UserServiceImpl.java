@@ -43,7 +43,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public void deleteUser(User user) {
-		userMapper.delete(user.getId());
+		userMapper.delete(user.getUserId());
 	}
 
 }

@@ -3,8 +3,9 @@
 
 <mapper namespace="com.kv.domain.mappers.UserMapper">
 
-	<resultMap type="User" id="userMap">
-		<id property="id" column="id" />
+	<resultMap type="user" id="userMap">
+		<id property="userId" column="userId" />
+		<association property="role" column="roleId" javaType="role" select="com.kv.domain.mappers.RoleMapper.getById" />
 		<result property="username" column="username" />
 		<result property="password" column="password" />
 		<result property="nickname" column="nickname" />

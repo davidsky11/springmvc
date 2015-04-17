@@ -22,7 +22,7 @@ public interface UserMapper {
 	
 	@Select("select * from t_user")
 	@Results(value = {
-		@Result(id = true, property = "id", column = "id"),
+		@Result(id = true, property = "userId", column = "userId"),
 		@Result(property = "username", column = "username"),
 		@Result(property = "password", column = "password"),
 		@Result(property = "nickname", column = "nickname"),
@@ -30,7 +30,7 @@ public interface UserMapper {
 	})
 	public List<User> list();
 	
-	@Select("select id, username, password, nickname, email from t_user where username = #{username}")
+	@Select("select * from t_user where username = #{username}")
 	@ResultMap(value = "userMap")
 	public User getUserByName(String name);
 	
@@ -38,10 +38,10 @@ public interface UserMapper {
 	@Options(useGeneratedKeys = true, keyProperty = "id")		// 字段生成主键
 	public void insert(User user);
 	
-	@Update("update t_user set username=#{username}, password=#{password}, nickname=#{nickname}, email=#{email} where id = #{id}")
+	@Update("update t_user set username=#{username}, password=#{password}, nickname=#{nickname}, email=#{email} where userId = #{userId}")
 	public void update(User user);
 	
-	@Delete("delete from t_user where id = #{id}")
-	public void delete(int id);
+	@Delete("delete from t_user where userId = #{userId}")
+	public void delete(int userId);
 	
 }
