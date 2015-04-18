@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.kv.domain.Role;
 import com.kv.domain.User;
 import com.kv.domain.mappers.UserMapper;
 import com.kv.service.IUserService;
@@ -18,7 +19,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User login(String username, String password) {
-		return userMapper.find(username, password);
+		return userMapper.login(username, password);
 	}
 
 	@Override
@@ -44,6 +45,11 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public void deleteUser(User user) {
 		userMapper.delete(user.getUserId());
+	}
+
+	@Override
+	public List<Role> listRole() {
+		return userMapper.listRole();
 	}
 
 }

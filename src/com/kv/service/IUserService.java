@@ -2,6 +2,7 @@ package com.kv.service;
 
 import java.util.List;
 
+import com.kv.domain.Role;
 import com.kv.domain.User;
 
 public interface IUserService {
@@ -12,5 +13,6 @@ public interface IUserService {
 	public List<User> listAll();
 	public void updateUser(User user);
 	public void deleteUser(User user);
+	public List<Role> listRole();
 	
 }

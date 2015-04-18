@@ -15,13 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kv.domain.Role;
 import com.kv.domain.User;
 import com.kv.exception.UserException;
 import com.kv.service.IUserService;
@@ -50,19 +50,23 @@ public class UserController {
 	}
 	
 	// 链接到add页面时是GET请求，会访问这段代码
-	/*
 	@RequestMapping(value = "/add", method=RequestMethod.GET)
 	public String add(Model model) {
 		// 开启modelDriven
-		model.addAttribute(new User());		return "user/add";
-	}  // 法一
-	*/
-	
-	@RequestMapping(value = "/add", method=RequestMethod.GET)
-	public String add(@ModelAttribute("user") User user) {
+		model.addAttribute(new User());
+		
+		List<Role> roles = userService.listRole();
+		model.addAllAttributes(roles);
 		
 		return "user/add";
-	}
+	}  // 法一
+	
+	/*@RequestMapping(value = "/add", method=RequestMethod.GET)
+	public String add(@ModelAttribute("user") User user) {
+		
+		
+		return "user/add";
+	}*/
 	
 	// 在具体添加用户时，是post请求，就访问以下代码
 	@RequestMapping(value = "/add", method=RequestMethod.POST)

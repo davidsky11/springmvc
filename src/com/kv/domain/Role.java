@@ -1,8 +1,5 @@
 package com.kv.domain;
 
-import org.apache.ibatis.type.Alias;
-
-@Alias("role")
 public class Role {
 
 	private int roleId;
@@ -10,6 +7,11 @@ public class Role {
 	
 	public Role() {
 		
+	}
+	
+	public Role(int roleId) {
+		super();
+		this.roleId = roleId;
 	}
 	
 	public Role(int roleId, String roleName) {

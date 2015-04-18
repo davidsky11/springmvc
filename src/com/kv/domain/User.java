@@ -4,11 +4,9 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
-import org.apache.ibatis.type.Alias;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-@Alias("user")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -674520540207871580L;

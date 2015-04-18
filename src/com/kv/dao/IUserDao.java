@@ -2,16 +2,13 @@ package com.kv.dao;
 
 import java.util.List;
 
+import com.kv.domain.Role;
 import com.kv.domain.User;
 
-public interface IUserDao {
+public interface IUserDao extends ICommonDao<User> {
 
-	public User find(String username, String password);
-	public void addUser(User user);
-	public User selectUserByName(String username);
-	public List<User> listUser();
-	public void updateUser(User user);
-	public void deleteUser(int id);
-	public void deleteUser(User user);
+	public User login(String username, String password);
+	public User getByName(String username);
+	public List<Role> listRole();
 	
 }

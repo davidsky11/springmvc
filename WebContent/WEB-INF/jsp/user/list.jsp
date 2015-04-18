@@ -26,6 +26,7 @@
 				<th>中文名</th>
 				<th>密码</th>
 				<th>邮箱</th>
+				<th>角色</th>
 				<th>修改</th>
 				<th>删除</th>
 			</tr>
@@ -36,6 +37,7 @@
 				<th><a href="${um.username }">${um.nickname }</a></th>
 				<th>${um.password }</th>
 				<th>${um.email }</th>
+				<th>${um.role.roleName }</th>
 				<th><a href="${um.username }/update">修改</a></th>
 				<th><a href="${um.username }/delete">删除</a></th>
 			</tr>

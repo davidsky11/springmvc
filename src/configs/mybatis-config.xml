@@ -26,27 +26,29 @@
     </settings>  
     
     <!-- 配置类型别名 -->
-    <!-- <typeAliases>
+    <typeAliases>
         <typeAlias alias="User" type="com.kv.domain.User" />
-    </typeAliases> -->
+        <typeAlias alias="Role" type="com.kv.domain.Role" />
+    </typeAliases>
 
     <!-- 配置数据源 -->
-    <!-- <environments default="development">
+    <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC" />
             <dataSource type="POOLED">
-                <property name="driver" value="oracle.jdbc.driver.OracleDriver" />
-                <property name="url" value="jdbc:oracle:thin:@xxx.xxx.xxx.xxx:xxxx:xxxxxx" />
-                <property name="username" value="xxxx" />
-                <property name="password" value="xxxx" />
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/spring_mvc" />
+                <property name="username" value="root" />
+                <property name="password" value="12345" />
             </dataSource>
         </environment>
-    </environments> -->
+    </environments>
     
     <!-- Register Mapper -->
     <mappers>
         <!-- SQL Mapper -->
         <mapper resource="configs/mapper/UserMapper.xml" />
+        <mapper resource="configs/mapper/RoleMapper.xml" />
     </mappers>
     
 </configuration>

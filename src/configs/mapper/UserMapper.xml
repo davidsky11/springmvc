@@ -3,13 +3,16 @@
 
 <mapper namespace="com.kv.domain.mappers.UserMapper">
 
-	<resultMap type="user" id="userMap">
+	<resultMap type="User" id="userMap">
 		<id property="userId" column="userId" />
-		<association property="role" column="roleId" javaType="role" select="com.kv.domain.mappers.RoleMapper.getById" />
 		<result property="username" column="username" />
 		<result property="password" column="password" />
 		<result property="nickname" column="nickname" />
 		<result property="email" column="email" />
+		<association property="role" column="roleId" javaType="Role" >
+			<id property="roleId" column="roleId" />
+			<result property="roleName" column="roleName" />
+		</association>
 	</resultMap>
 	<!-- 
 	<sql id="userColumn">id, username, password, nickname, email</sql>

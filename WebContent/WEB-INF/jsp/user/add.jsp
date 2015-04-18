@@ -18,6 +18,12 @@
 		<sf:form class="form-horizontal" method="post" modelAttribute="user" enctype="multipart/form-data"><br/>
 			<fieldset>
 			<legend>新增用户信息</legend>
+			<div class="">
+				<label class="control-label" for="roleId">用户类别</label>
+				<div class="controls">
+					<sf:select id="roleId" path="roleId" items="roles" itemLabel="roleName" itemValue="roleId" /><sf:errors path="roleId" />
+				</div>
+			</div>
 			<div class="control-group">
 				<label class="control-label" for="username">用户名</label>
 				<div class="controls">
