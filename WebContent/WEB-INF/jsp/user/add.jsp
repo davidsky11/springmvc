@@ -21,7 +21,7 @@
 			<div class="">
 				<label class="control-label" for="roleId">用户类别</label>
 				<div class="controls">
-					<sf:select id="roleId" path="roleId" items="roles" itemLabel="roleName" itemValue="roleId" /><sf:errors path="roleId" />
+					<sf:select id="role" path="role" items="roles" itemLabel="roleName" itemValue="role" /><sf:errors path="role" />
 				</div>
 			</div>
 			<div class="control-group">

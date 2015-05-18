@@ -64,7 +64,6 @@ public class UserController {
 	/*@RequestMapping(value = "/add", method=RequestMethod.GET)
 	public String add(@ModelAttribute("user") User user) {
 		
-		
 		return "user/add";
 	}*/
 	
